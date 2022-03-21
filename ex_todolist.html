@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js"></script>
+    <link rel="stylesheet" href="../220316_Vue/count_up_down.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <h2>Todo List</h2>
+    <div id="app">
+        <div v-for="todo in todos">
+            <label>
+                <input type="checkbox" v-model="todo.done">
+                <span :class="{ donestyle: todo.done }">
+                    해야할일 : {{ todo.text }} /</span>
+                <span :class="{ donestyle: todo.done }">
+                    완료일 : {{ todo.DueDate }}</span>
+            </label>
+        </div>
+
+        <!-- 아래 인풋박스에 값이 들어오면 todolist에 데이터 목록 추가 -->
+        <input type="text" v-model.trim="addText" v-on:keyup.enter="addToDo" placeholder="할일">
+        <p>
+            <button @click="cleanToDo">처리완료삭제</button>
+            <button @click="sortData('text')">Text 정렬</button>
+            <button @click="sortData('DueDate')">Duedate 정렬</button>
+        </p>
+
+        <p>{{ remaining }} / {{ todos.length }}건 처리</p>
+    </div>
+
+    <script>
+        new Vue({
+            el: "#app",
+            data() {
+                return {
+                    todos: [
+                        { done: false, text: "빵사기", DueDate: "20191201" }, // DueDate : 완료일
+                        { done: false, text: "커피사기", DueDate: "20190702" },
+                        { done: false, text: "공부하기", DueDate: "20191010" },
+                        { done: false, text: "놀기", DueDate: "20190811" },
+                        { done: false, text: "영화보기", DueDate: "20190524" }
+                    ],
+                    addText: ""
+                }
+            },
+            computed: {
+                remaining: function () {
+                    return this.todos.filter(function (value) {
+                        return value.done
+                    }).length;
+                }
+            },
+            methods: {
+                // 아래 데이터 추가 시 로직 만들기
+                addToDo: function () { // function(value) - 1번
+                    if (this.addText) {
+                        // if(this.addText.length>0) {
+                        this.todos.push({ done: false, text: this.addText }); // text: value - 2번
+                        this.addText = "";
+                    }
+                },
+                cleanToDo: function () {
+                    // todos 배열에서 val.done값이 false인것만 선택하여 새 배열 만듦
+                    this.todos = this.todos.filter(function (value) {
+                        return value.done == false;
+                    });
+                    
+                },
+                // 완료 매개변수의 값에 따라 정렬하는 함수
+
+                // lodash의 orderBy 함수 사용하기
+                // 첫 번째 매개변수 : 객체배열
+                // 두 번째 매개변수 : 정렬하고싶은 객체의 속성
+                // 세 번째 매개변수 : 오름차순("asc"), 내림차순(desc)
+
+                sortData: function (val) {
+                    this.todos = _.orderBy(this.todos, val, "asc");
+                }
+            }
+        });
+    </script>
+
+    <style>
+        .donestyle {
+            text-decoration: line-through;
+            color: lightgray;
+        }
+    </style>
+</body>
+
+</html>

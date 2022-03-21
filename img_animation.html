@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="../220316_Vue/count_up_down.css">
+    <style>
+        /* 1초동안 투명도 및 위치 변화 */
+        .v-enter-active, .v-leave-active {
+            transition: opacity 1s, transform 1s;
+        }
+        /* 출력할 때는 왼쪽에서 오른쪽으로 */
+        .v-enter {
+            opacity: 0;
+            transform: translateX(-100px);
+        }
+        /* 사라질 때는 아래로 */
+        .v-leave-to {
+            opacity: 0;
+            transform: translateY(100px);
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <!-- 토글 버튼 -->
+        <p><button @click="show=!show">변경하기</button></p>
+        <transition>
+            <div v-show="show">
+                <img src="../img3/boy.png" alt="girl 이미지"></img>
+            </div>
+        </transition>
+    </div>
+
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                show: true
+            }
+        });
+    </script>
+</body>
+</html>
